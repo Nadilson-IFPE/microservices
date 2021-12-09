@@ -1,5 +1,6 @@
 const Avaliacao = require("../model/Avaliacao");
 const Filme = require("../model/Avaliacao");
+const Assinantes = require("../model/Avaliacao");
 
 module.exports = {
     name: "avaliacao-service",
@@ -11,10 +12,15 @@ module.exports = {
     actions: {
         async avaliar(ctx) {
             const idFilme = ctx.params.idFilme;
+            const idAssinante = ctx.params.idAssinante;
             const nota = ctx.params.nota;
 
             const exists = await ctx.call("v1.catalogo-service.exists", {
                 id: idFilme
+            });
+
+            const assinanteExists = await ctx.call("v1.assinantes-service.exists", {
+                id: idAssinante
             });
 
             if (!exists) {
@@ -31,7 +37,7 @@ module.exports = {
             
 
             return Avaliacao.create({
-                idFilme, nota
+                idFilme, idAssinante, nota
             });
         }
     }
